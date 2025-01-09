@@ -40,6 +40,10 @@ library TransientBytes {
         return _retrieveBytes(slot);
     }
 
+    function delet(bytes32 slot) external {
+        _deleteBytes(slot);
+    }
+
     function _retrieveBytes(bytes32 slot) internal view returns (bytes memory result) {
         assembly {
             // Load the length of the bytes array from transient storage
@@ -69,6 +73,30 @@ library TransientBytes {
                 mstore(add(writePtr, mul(fullWords, 32)), and(lastWord, not(0)))
             }
             mstore(0x40, add(writePtr, mul(add(fullWords, gt(remainder, 0)), 32)))
+        }
+    }
+
+    function _deleteBytes(bytes32 slot) internal {
+        assembly {
+            let length := tload(slot)
+            tstore(slot, 0)
+
+            let dataSlot := add(slot, 1)
+
+            // Calculate the number of full 32-byte chunks and remaining bytes
+            let fullWords := div(length, 32)
+            let remainder := mod(length, 32)
+
+            let i := 0
+            // Load full 32-byte chunks from transient storage into memory
+            for {  } lt(i, fullWords) { i := add(i, 1) } {
+                tstore(add(dataSlot, i), 0)
+            }
+
+            // Handle any remaining bytes
+            if remainder {
+                tstore(add(dataSlot, i), 0)
+            }
         }
     }
 }
