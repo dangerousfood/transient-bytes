@@ -78,25 +78,7 @@ library TransientBytes {
 
     function _deleteBytes(bytes32 slot) internal {
         assembly {
-            let length := tload(slot)
             tstore(slot, 0)
-
-            let dataSlot := add(slot, 1)
-
-            // Calculate the number of full 32-byte chunks and remaining bytes
-            let fullWords := div(length, 32)
-            let remainder := mod(length, 32)
-
-            let i := 0
-            // Load full 32-byte chunks from transient storage into memory
-            for {  } lt(i, fullWords) { i := add(i, 1) } {
-                tstore(add(dataSlot, i), 0)
-            }
-
-            // Handle any remaining bytes
-            if remainder {
-                tstore(add(dataSlot, i), 0)
-            }
         }
     }
 }

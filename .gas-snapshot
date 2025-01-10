@@ -1,0 +1,6 @@
+TransientBytesTest:testFuzz_deleteBytes(bytes,bytes32) (runs: 257, μ: 13734, ~: 13576)
+TransientBytesTest:testFuzz_storeBytes(bytes,bytes32) (runs: 257, μ: 9802, ~: 9613)
+TransientBytesTest:testFuzz_storeBytes_noAddress(bytes) (runs: 257, μ: 10024, ~: 9836)
+TransientBytesTest:test_deleteBytes() (gas: 13093)
+TransientBytesTest:test_storeBytes() (gas: 9087)
+TransientBytesTest:test_storeBytes_noAddress() (gas: 9324)
